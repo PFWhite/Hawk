@@ -6,7 +6,6 @@ nunjucks.configure({ autoescape: true });
 
 var component_name = process.argv[2];
 
-console.log(component_name);
 var dirName = "components/"+component_name;
 if (!fs.existsSync(dirName)){
 	fs.mkdirSync(dirName);
@@ -33,9 +32,11 @@ fs.closeSync(fd);
 fd = fs.openSync(dirName + component_name + "_test.js", 'w');
 var testTemp = "describe('{{component}} Test Cases', function () { \n\
     it('Test Case 1', function () {\n\
-       \n\
+       expect(false).toBe(true)\n\
     });\n\
 });";
 fs.writeSync(fd, nunjucks.renderString(testTemp, { component: component_name }));
 fs.closeSync(fd);
+
+console.log('Done!');
 
