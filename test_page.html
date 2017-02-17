@@ -1,3 +1,11 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <div id="mount">
+            mount point
+        </div>
+        <script>
 ! function () {
     var config = {};
     window.Hawk = function (config) {
@@ -12,8 +20,9 @@
                     var xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = function () {
                         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                            self.loadStatus[componentName] = 'done';
                             resolve(this.response);
+                        } else if (this.status != 200) {
+                            reject(this.response);
                         }
                     };
                     xhr.open('GET', "/" + componentName + '/' + componentName + '.html');
@@ -21,12 +30,12 @@
                     xhr.send();
                 })
                     .then(function (response) {
-                        document.write(response);
+                        document.body.write(response);
                         // this.resources[componentName] = {
                         //     templateURL: response.template,
                         //     codeURL: response.codeURL
                         // };
-                    }).catch(function (test) {document.write(test.response)});
+                    });
             };
 
             this.getComponent = function(componentName) {
@@ -42,6 +51,9 @@
                         return self.getComponent(componentName);
                     } else {
                         return startLoading(componentName)
+                            .then(function () {
+                                self.getComponent(componentName);
+                            });
                     }
                 });
             };
@@ -62,3 +74,6 @@
 
 
 }()
+        </script>
+    </body>
+</html>

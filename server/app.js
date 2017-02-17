@@ -1,17 +1,20 @@
 var express = require('express');
 var path = require('path');
+var nunjucks = require('nunjucks');
 
 var app = express();
 
-app.use(express.static('/components', express.static(path.join(__dirname, 'components'))));
+// app.use('/components', express.static(path.join(__dirname, 'components')));
+
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+});
+
+app.use(express.static('components'));
 
 app.get('/', function (req, res) {
-    var componentName = 'patrick';
-    res.send({
-        componentName: 'patrick',
-        template: '/components/patrick/patrick.html',
-        codeURL: `/components/patrick/patrick.js`
-    });
+    res.render('test_page.html');
 });
 
 app.listen(1337);
