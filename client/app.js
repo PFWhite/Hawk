@@ -34,7 +34,10 @@ function () {
                     if (self.loadStatus[componentName]) {
                         return self.getComponent(componentName);
                     } else {
-                        return startLoading(componentName);
+                        return startLoading(componentName)
+                            .then(function () {
+                                self.getComponent(componentName);
+                            });
                     }
                 });
             };
